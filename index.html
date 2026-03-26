@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>대학 추천</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #f0f2f5;
+    text-align: center;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    margin: 50px auto;
+    width: 400px;
+    border-radius: 15px;
+}
+
+select, input, button {
+    width: 90%;
+    padding: 10px;
+    margin: 10px;
+}
+
+.card-up { background: #ffcccc; padding:10px; margin:5px;}
+.card-mid { background: #fff3cd; padding:10px; margin:5px;}
+.card-safe { background: #d4edda; padding:10px; margin:5px;}
+</style>
+
+<script>
+const majors = {
+    "공학": ["전체", "기계", "컴퓨터"],
+    "자연": ["전체", "수학"]
+};
+
+function updateMajors() {
+    let category = document.getElementById("category").value;
+    let majorSelect = document.getElementById("major");
+
+    majorSelect.innerHTML = "";
+
+    majors[category].forEach(m => {
+        let option = document.createElement("option");
+        option.value = m;
+        option.text = m;
+        majorSelect.appendChild(option);
+    });
+}
+</script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>🎓 대학 추천</h2>
+
+<form method="POST">
+
+<select name="system">
+<option value="9">9등급제</option>
+<option value="5">5등급제</option>
+</select>
+
+<select id="category" name="category" onchange="updateMajors()">
+<option value="공학">공학</option>
+<option value="자연">자연</option>
+</select>
+
+<select id="major" name="major"></select>
+
+<input type="text" name="grade" placeholder="내신 입력 (예: 1.56)">
+
+<button type="submit">추천</button>
+
+</form>
+
+<hr>
+
+<h3>🔥 상향</h3>
+{% for uni in results["상향"] %}
+<div class="card-up">{{ uni }}</div>
+{% endfor %}
+
+<h3>👍 적정</h3>
+{% for uni in results["적정"] %}
+<div class="card-mid">{{ uni }}</div>
+{% endfor %}
+
+<h3>🟢 안정</h3>
+{% for uni in results["안정"] %}
+<div class="card-safe">{{ uni }}</div>
+{% endfor %}
+
+</div>
+
+<script>
+updateMajors();
+</script>
+
+</body>
+</html>
